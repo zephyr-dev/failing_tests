@@ -80,11 +80,14 @@ failingTestUrls  b = do
 data CircleBuildOutput = CircleBuildOutput { 
   circleOutputMessages :: T.Text
 } deriving (Show)
+
 instance FromJSON CircleBuildOutput where
-  parseJSON (Array v) = createCircleOutput <$> parseJSON v
-    where 
-      createCircleOutput s = CircleBuildOutput $ show . head s
+  parseJSON arr@(Array v) = do
+    array <- parseJSON arr
+    CircleBuildOutput <$> (head array) .: "message"
   parseJSON _          = mzero
+
+
 
 decodeCircleStdout :: BL.ByteString -> Maybe CircleBuildOutput
 -- TODO make this an instance of toJSON

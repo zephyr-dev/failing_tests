@@ -1,0 +1,32 @@
+name:                failingtests
+version:             0.1.0.0
+description:         Experimental CircleCI client.
+license:             MIT
+author:              James Vanneman
+maintainer:          james@gust.com
+build-type:          Simple
+cabal-version:       >=1.8
+
+executable failing_tests
+  hs-source-dirs: src
+  main-is:        Main.hs
+  ghc-options:    -static -Wall
+  buildable: True
+  build-depends:
+      base >= 4 && < 5
+      , attoparsec
+      , text
+      , mtl
+      , transformers
+      , lens
+      , aeson
+      , lens-aeson
+      , network
+      , bytestring
+      , split
+      , wreq
+      , containers
+      , vector
+      , process
+      , directory
+      , http-conduit

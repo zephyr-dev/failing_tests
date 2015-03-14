@@ -18,7 +18,8 @@ executable failing_tests
       , aeson
       , bytestring
       , vector
-      , http-conduit
       , process
       , containers
       , text
+      , wreq
+      , lens

@@ -7,7 +7,7 @@ import Control.Lens
 import Network.Wreq
 import qualified Data.ByteString.Lazy as BL
 import Control.Applicative(pure, (<$>), (<*>), (<|>))
-import Data.Aeson (Value(..), decode, encode, FromJSON(..), (.:), (.:?))
+import Data.Aeson (Value(..), decode, encode, FromJSON(..), (.:))
 {- import Data.Map (Map) -}
 {- import qualified Data.Vector as V -}
 import qualified Data.Text as T
@@ -21,16 +21,13 @@ buildUrl num = "https://circleci.com/api/v1/project/zephyr-dev/gust/" ++ (show n
 data Build = Build { 
                 id     :: Integer
               , status :: T.Text
-              , author :: [T.Text]
-              {- , branch :: T.Text -}
+              , author :: T.Text
+              , branch :: T.Text
              } deriving (Show)
 
 instance FromJSON Build where
   parseJSON (Object v) = do
-    allCommitDetails <- v .:? "all-commit-details"
-    case allCommitDetails of 
-         Just allDetails -> (parseJSON $ head allDetails) >>= (\details -> Build <$> v .: "build_num" <*> v .: "outcome" <*> (v .: "all-commit-details" <|>  pure ""))
-         Nothing           -> Build <$> v .: "build_num" <*> v .: "outcome" <*> pure "" 
+    Build <$> v .: "build_num" <*> v .: "outcome" <*> (v .: "author_name" <|> pure "") <*> v .: "branch"
   parseJSON _  = mzero
 
 data Builds = Builds { builds :: [Build] } deriving(Show)

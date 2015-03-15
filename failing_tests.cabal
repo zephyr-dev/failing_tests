@@ -23,3 +23,4 @@ executable failing_tests
       , text
       , wreq
       , lens
+      , unordered-containers

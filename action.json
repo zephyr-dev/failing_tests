@@ -1,0 +1,26 @@
+{
+  "truncated": false,
+  "index": 6,
+  "command": "Start container",
+  "parallel": true,
+  "failed": null,
+  "infrastructure_fail": null,
+  "name": "Start container",
+  "bash_command": null,
+  "status": "success",
+  "timedout": null,
+  "continue": null,
+  "end_time": "2015-03-13T22:14:22.185Z",
+  "source": "config",
+  "type": "infrastructure",
+  "messages": [
+
+  ],
+  "output_url": "https://circle-production-action-output.s3.amazonaws.com/c0597a4eb95f0d7fa3163055-zephyr-dev-gust-1-6?AWSAccessKeyId=AKIAI3VNUNBFDODWKRVA&Expires=1584236142&Signature=bp2irEUaZGupwCfh%2Fg%2BXS%2Fwt4Tk%3D",
+  "start_time": "2015-03-13T22:14:18.071Z",
+  "exit_code": 0,
+  "canceled": null,
+  "step": 1,
+  "run_time_millis": 4114,
+  "has_output": true
+}

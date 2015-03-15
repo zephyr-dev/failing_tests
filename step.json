@@ -1,0 +1,28 @@
+{
+  "name": "Starting the build",
+  "actions": [
+    {
+    "truncated": false,
+    "index": 0,
+    "command": "Starting the build",
+    "parallel": false,
+    "failed": null,
+    "infrastructure_fail": null,
+    "name": "Starting the build",
+    "bash_command": null,
+    "status": "success",
+    "timedout": null,
+    "continue": null,
+    "end_time": "2015-03-13T22:14:18.056Z",
+    "type": "infrastructure",
+    "messages": [
+    ],
+    "start_time": "2015-03-13T22:14:16.819Z",
+    "exit_code": null,
+    "canceled": null,
+    "step": 0,
+    "run_time_millis": 1237,
+    "has_output": false
+  }
+  ]
+}

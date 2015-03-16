@@ -31,19 +31,16 @@ buildsForBranch currBranch maybeBuiltCollection = do
   return $ filterByBranch currBranch (builds buildCollection)
 
 outputUrlsForFailedSteps :: Steps -> [T.Text]
-outputUrlsForFailedSteps = outputUrlsForSteps . failedSteps
+outputUrlsForFailedSteps = outputUrlsForActions . failedActions . actionsInSteps 
 
-failedSteps :: Steps -> [Step]
-failedSteps allSteps = filter failedStep $ circleSteps allSteps
-  where 
-    failedStep :: Step -> Bool
-    failedStep s = any actionFailed $ stepActions s
+failedActions :: [Action] -> [Action]
+failedActions = filter actionFailed
 
-outputUrlsForSteps :: [Step] -> [T.Text]
-outputUrlsForSteps steps = concat $ map collectActionOutputUrls steps
-  where
-    collectActionOutputUrls :: Step -> [T.Text]
-    collectActionOutputUrls step =  map outputUrl $ stepActions step
+actionsInSteps :: Steps -> [Action]
+actionsInSteps steps = concat . map stepActions $ circleSteps steps
+
+outputUrlsForActions  :: [Action]-> [T.Text]
+outputUrlsForActions actions = map outputUrl actions
 
 maybeListToMaybe :: Maybe [a] -> Maybe a
 maybeListToMaybe x = x >>= listToMaybe
@@ -67,8 +64,7 @@ failingSpecs outputArray = do
 
 getit :: Maybe [T.Text] -> IO ()
 getit mxs = case mxs of 
-                 Just xs -> printMessagesForSteps xs
-                 Nothing -> return ()
+                 Just xs -> printMessagesForSteps xs Nothing -> return ()
     where
       printMessagesForSteps :: [T.Text] -> IO ()
       printMessagesForSteps buildUrls = do 
@@ -83,14 +79,14 @@ getit mxs = case mxs of
 printBuildMessages :: Build ->  IO ()
 printBuildMessages bld = do 
   response <- getWith opts $ buildUrl (buildId bld)
-  getit $ outputUrlsForFailedSteps <$> (decodeSteps $ response ^. responseBody)
+  putStrLn $ show $ outputUrlsForFailedSteps <$> (decodeSteps $ response ^. responseBody)
+
 
 buildMessagesForLastFailure :: Branch -> Maybe [Build] -> IO ()
 buildMessagesForLastFailure gitBranch blds = do
   case (maybeListToMaybe blds) of 
      Just circleBuild -> printBuildMessages circleBuild
      Nothing -> putStrLn $ "There were no builds for: " ++ (T.unpack gitBranch) ++ " in the last 30 builds on circle"
-
 
 main :: IO ()
 main = do

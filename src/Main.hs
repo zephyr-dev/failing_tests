@@ -31,10 +31,8 @@ buildsForBranch currBranch maybeBuiltCollection = do
   return $ filterByBranch currBranch (builds buildCollection)
 
 outputUrlsForFailedSteps :: Steps -> [T.Text]
-outputUrlsForFailedSteps = outputUrlsForActions . failedActions . actionsInSteps 
+outputUrlsForFailedSteps = outputUrlsForActions . (filter actionFailed) . actionsInSteps 
 
-failedActions :: [Action] -> [Action]
-failedActions = filter actionFailed
 
 actionsInSteps :: Steps -> [Action]
 actionsInSteps steps = concat . map stepActions $ circleSteps steps

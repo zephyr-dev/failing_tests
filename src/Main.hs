@@ -64,10 +64,11 @@ failingSpecs outputArray = do
 
 getit :: Maybe [T.Text] -> IO ()
 getit mxs = case mxs of 
-                 Just xs -> printMessagesForSteps xs Nothing -> return ()
+                 Just xs -> printOutput xs 
+                 Nothing -> return ()
     where
-      printMessagesForSteps :: [T.Text] -> IO ()
-      printMessagesForSteps buildUrls = do 
+      printOutput :: [T.Text] -> IO ()
+      printOutput buildUrls = do 
         outputResponses <- mapM responseBodyForUrl $ map T.unpack buildUrls 
         putStrLn $ failingSpecs outputResponses
           where 
@@ -79,8 +80,7 @@ getit mxs = case mxs of
 printBuildMessages :: Build ->  IO ()
 printBuildMessages bld = do 
   response <- getWith opts $ buildUrl (buildId bld)
-  putStrLn $ show $ outputUrlsForFailedSteps <$> (decodeSteps $ response ^. responseBody)
-
+  getit $ outputUrlsForFailedSteps <$> (decodeSteps $ response ^. responseBody)
 
 buildMessagesForLastFailure :: Branch -> Maybe [Build] -> IO ()
 buildMessagesForLastFailure gitBranch blds = do
